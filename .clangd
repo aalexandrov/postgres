@@ -1,0 +1,30 @@
+CompileFlags:
+  # Tell clangd where to find the compilation database if it's not in the root
+  CompilationDatabase: build/debug/
+  # Add fallback flags in case a file isn't in the database
+  Add:
+    # Make src/include available
+    - "-Isrc/include"
+    # Force include the postgres.h header
+    - "-include"
+    - "postgres.h"
+    # Force include the c.h header where bool is defined
+    - "-include"
+    - "c.h"
+    # Ensure the standard C99/C11 bool is also available as a fallback
+    - "-Dbool=_Bool"
+    # Enable GNU extensions to the C and OS standards
+    - "-D_GNU_SOURCE"
+
+Index:
+  # Background indexing is essential for a codebase as large as Postgres
+  Background: Build
+
+Diagnostics:
+  UnusedIncludes: Strict
+  # Suppress noisy warnings often found in older parts of the C source
+  Suppress: ["unused-parameter", "missing-field-initializers"]
+
+Hover:
+  # Useful for seeing macro expansions in complex Postgres code
+  ShowAKA: Yes
